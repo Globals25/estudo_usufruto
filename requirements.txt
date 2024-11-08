@@ -1,3 +1,4 @@
+gunicorn
 altair==5.4.1
 anyio==4.5.0
 arch==7.0.0
