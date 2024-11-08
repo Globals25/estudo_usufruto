@@ -322,6 +322,7 @@ periodo_carteiras = ["10 Anos",
                      "30 Anos"]
 
 app = Dash(__name__)
+server = app.server
 
 app.layout = html.Div(style = {"color":"#392B84"},children=[
 
