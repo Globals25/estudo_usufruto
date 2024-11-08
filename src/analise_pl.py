@@ -12,7 +12,7 @@ from tqdm.auto import tqdm, trange
 from pathlib import Path
 
 # In[345]:
-xlsx_path = Path(__file__).parent.parent/'data'/
+xlsx_path = Path(__file__).parent.parent/'data'
 
 def carrega_carteiras_pl(periodo,taxa):
     nomes_carteiras = ["Conservadora - Análise PL",
