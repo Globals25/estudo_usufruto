@@ -11,9 +11,6 @@ from dash import Dash, dcc, html, Input, Output, callback
 from tqdm.auto import tqdm, trange
 from pathlib import Path
 
-# In[345]:
-xlsx_path = Path(__file__).parent.parent/data
-
 def carrega_carteiras_pl(periodo,taxa):
     nomes_carteiras = ["Conservadora - Análise PL",
                        "Moderada - Análise PL",
@@ -40,7 +37,7 @@ def carrega_carteiras_pl(periodo,taxa):
     
     carteiras = pd.DataFrame()
     for i in range(len(nomes_carteiras)):
-        caminho_arquivo_carteira = "/data/{}/{}/{}.xlsx".format(nomes_carteiras[i],
+        caminho_arquivo_carteira = Path(__file__).parent.parent/'data/{}/{}/{}.xlsx'.format(nomes_carteiras[i],
                                                                     periodo_carteiras[periodo],
                                                                     taxa_retirada[taxa])
         carteira = pd.read_excel(caminho_arquivo_carteira)
@@ -78,7 +75,7 @@ def carrega_carteiras_pl_dash(periodo,taxa):
 
     carteiras = pd.DataFrame()
     for i in range(len(nomes_carteiras)):
-        caminho_arquivo_carteira = "/data/{}/{}/{}.xlsx".format(nomes_carteiras[i],
+        caminho_arquivo_carteira = Path(__file__).parent.parent/'data/{}/{}/{}.xlsx'.format(nomes_carteiras[i],
                                                                                                              periodo,
                                                                                                              taxa)
         carteira = pd.read_excel(caminho_arquivo_carteira)
@@ -115,7 +112,7 @@ def carrega_carteiras_retornos(carteira_idx,periodo):
     carteiras = pd.DataFrame()
     #10 Anos Conservadora - Análise PL_10 Anos
     #carteiras_pl/10 Anos/Conservadora 10 - Análise PL_10 Anos.xlsx'
-    caminho_arquivo_carteira = "/data/{}/{} {} - Análise PL_{}.xlsx".format(nomes_carteiras[carteira_idx],
+    caminho_arquivo_carteira = Path(__file__).parent.parent/'data/{}/{}/{}.xlsx'.format(nomes_carteiras[carteira_idx],
                                                                                                                          periodo_carteiras[periodo],
                                                                                                                          nomes_carteiras[carteira_idx].split()[0],
                                                                                                                          periodo_carteiras[periodo])
