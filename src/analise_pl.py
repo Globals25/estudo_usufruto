@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[313]:
-
-
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output, callback
@@ -49,46 +46,6 @@ def carrega_carteiras_pl(periodo,taxa):
 
     return carteiras
 
-
-# In[362]:
-
-
-def carrega_carteiras_pl_dash(periodo,taxa):
-    nomes_carteiras = ["Conservadora - Análise PL",
-                       "Moderada - Análise PL",
-                       "Arrojada - Análise PL",
-                       "Agressiva - Análise PL"]
-    
-    periodo_carteiras = ["10 Anos",
-                         "12 Anos",
-                         "14 Anos",
-                         "16 Anos",
-                         "18 Anos",
-                         "20 Anos",
-                         "22 Anos",
-                         "24 Anos",
-                         "26 Anos",
-                         "28 Anos",
-                         "30 Anos"]
-    
-    taxa_retirada = ["2.50%","3.00%","3.50%","4.00%","4.50%","5.00%","5.50%","6.00%","6.50%","7.00%"]
-
-    carteiras = pd.DataFrame()
-    for i in range(len(nomes_carteiras)):
-        caminho_arquivo_carteira = Path(__file__).parent.parent/'data/{}/{}/{}.xlsx'.format(nomes_carteiras[i],
-                                                                                                             periodo,
-                                                                                                             taxa)
-        carteira = pd.read_excel(caminho_arquivo_carteira)
-        carteira.drop(["Unnamed: 0"], axis = 1, inplace= True)
-        carteira_tratada = carteira.iloc[-1].rename(nomes_carteiras[i].split()[0])
-        carteiras[nomes_carteiras[i].split()[0]] = carteira_tratada
-        
-    return carteiras
-
-
-# In[354]:
-
-
 def carrega_carteiras_retornos(carteira_idx,periodo):
     nomes_carteiras = ["Conservadora - Análise PL",
                        "Moderada - Análise PL",
@@ -123,68 +80,7 @@ def carrega_carteiras_retornos(carteira_idx,periodo):
 
     return carteiras
 
-
-# In[343]:
-
-
-periodo_carteiras = ["10 Anos",
-                     "12 Anos",
-                     "14 Anos",
-                     "16 Anos",
-                     "18 Anos",
-                     "20 Anos",
-                     "22 Anos",
-                     "24 Anos",
-                     "26 Anos",
-                     "28 Anos",
-                     "30 Anos"]
-
-taxa_retirada = ["2.50%","3.00%","3.50%","4.00%","4.50%","5.00%","5.50%","6.00%","6.50%","7.00%"]
-
-combinacoes = []
-
-for i in trange(len(periodo_carteiras)):
-    print(f"Período: {periodo_carteiras[i]}")
-    for o in trange(len(taxa_retirada)):
-        print(f"Taxa: {taxa_retirada[o]}")
-        grupo_carteira = carrega_carteiras_pl(i,o)
-        combinacoes.append(grupo_carteira)
-
-dados_completos = pd.concat(combinacoes)
-
-
-# In[358]:
-
-
-nomes_carteiras = ["Conservadora - Análise PL",
-                   "Moderada - Análise PL",
-                   "Arrojada - Análise PL",
-                   "Agressiva - Análise PL"]
-
-periodo_carteiras = ["10 Anos",
-                     "12 Anos",
-                     "14 Anos",
-                     "16 Anos",
-                     "18 Anos",
-                     "20 Anos",
-                     "22 Anos",
-                     "24 Anos",
-                     "26 Anos",
-                     "28 Anos",
-                     "30 Anos"]
-combinacoes = []
-
-for i in trange(len(nomes_carteiras)):
-    print(f"Carteira: {nomes_carteiras[i].split()[0]}")
-    for o in trange(len(periodo_carteiras)):
-        print(f"Periodo: {periodo_carteiras[o]}")
-        grupo_carteira = carrega_carteiras_retornos(i,o)
-        combinacoes.append(grupo_carteira)
-
-dados_completos_retornos = pd.concat(combinacoes)
-
-
-# ## Análise de Drawdown
+ ## Análise de Drawdown
 
 # In[424]:
 
@@ -217,8 +113,8 @@ periodo_carteiras = ["10 Anos",
                      "28 Anos",
                      "30 Anos"]
 
-maximos_dd = []
-
+caminho_arquivo_dados_completos = Path(__file__).parent.parent/'data/dados_completos_retornos.xlsx'
+dados_completos_retornos = pd.read_excel(caminho_arquivo_dados_completos)
 draw_downs_totais = pd.DataFrame(columns = ["Conservadora","Moderada","Arrojada","Agressiva"])
 for i in range(len(nomes_carteiras)):
     dd, mdd = calcula_drawdown(dados_completos_retornos[(dados_completos_retornos["Periodo"] == "10 Anos") 
@@ -226,30 +122,6 @@ for i in range(len(nomes_carteiras)):
                               )
     
     draw_downs_totais[nomes_carteiras[i].split()[0]] = mdd  
-        
-        
-
-
-# In[453]:
-
-
-draw_downs_totais
-
-
-# In[450]:
-
-
-draw_downs_totais
-
-
-# In[425]:
-
-
-dd_teste, drawdown_max = calcula_drawdown(carteira_dd)
-
-
-# In[471]:
-
 
 def desenha_box_formatado(dataset,titulo_y,titulo_x):
     fig = px.box(dataset, color_discrete_sequence = ["black"])
@@ -298,10 +170,7 @@ def desenha_box_formatado(dataset,titulo_y,titulo_x):
     return fig
 
 
-# ## Implementação do dashboard
-
-# In[473]:
-
+## Implementação do dashboard
 
 from dash import Dash, dcc, html, Input, Output,callback
 
@@ -368,9 +237,6 @@ app.layout = html.Div(style = {"color":"#392B84"},children=[
         id='box_plot2',
         figure=fig
     ),
-    
-
-
 ])
 
 @app.callback(
@@ -423,13 +289,9 @@ def update_graph(periodo_carteira):
     
     return fig
 
-
-
 if __name__ == '__main__':
-    app.run(debug=False, host = "0.0.0.0", port = 8080)
+    app.run(debug=False, host = "0.0.0.0", port = 8050)
 
-
-# In[ ]:
 
 
 
